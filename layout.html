@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>xLayout Example</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="xLayout.js"></script>
+    <style>
+        div {
+            margin: 5px;
+            padding: 5px;
+            border: 5px solid black;
+        }
+        #header, #footer, #outerMain {
+            width: 100%;
+        }
+        #mainLeft, #mainRight {
+            height: 100%;
+        }
+        #mainRight {
+            width: 200px;
+        }
+    </style>
+    <script>
+        var layout = {
+            'rows' : [
+                {
+                    'id': 'header',
+                    'outerWidth': '100%'
+                },
+                {
+                    'id': 'outerMain',
+                    'outerWidth': '100%',
+                    'outerHeight': '100%',
+                    'columns' : [
+                        {
+                            'id': 'mainLeft',
+                            'outerHeight': '100%',
+                            'outerWidth': '100%',
+                        },
+                        {
+                            'id': 'mainRight',
+                            'outerHeight': '100%',
+                            'outerWidth': '200',
+                        },
+                    ]
+                },
+                {
+                    'id': 'footer',
+                    'outerWidth': '100%'
+                },
+            ]
+        };
+        $('body').xLayout(layout);
+    </script>
+</head>
+<body>
+    <div id="header">
+        Some Header Text
+    </div>
+    <div id="outerMain">
+        <div id="mainLeft">
+            mainLeft
+        </div>
+        <div id="mainRight">
+            mainRight
+        </div>
+    </div>
+    <div id="footer">
+        Some Footer Text
+    </div>
+</body>
+</html>

@@ -6,16 +6,19 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="xLayout.js"></script>
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
         div {
-            margin: 5px;
+            margin: 25px;
             padding: 5px;
+            padding: 0px;
             border: 5px solid black;
         }
-        #header, #footer, #outerMain {
-            width: 100%;
-        }
         #mainLeft, #mainRight {
-            height: 100%;
+            float: left;
         }
         #mainRight {
             width: 200px;
@@ -32,6 +35,7 @@
                     'id': 'outerMain',
                     'outerWidth': '100%',
                     'outerHeight': '100%',
+                    'minimumHeight' : 100,
                     'columns' : [
                         {
                             'id': 'mainLeft',
@@ -51,7 +55,12 @@
                 },
             ]
         };
-        $('body').xLayout(layout);
+        $(function () {
+            $(window).xLayout(layout);
+            $(window).resize(function () {
+                $(window).xLayout(layout);
+            });
+        });
     </script>
 </head>
 <body>

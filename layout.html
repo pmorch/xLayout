@@ -18,7 +18,7 @@
             border: 5px solid black;
         }
         #mainLeft, #mainRight {
-            /* float: left; */
+            float: left;
         }
         #mainRight {
             width: 200px;
@@ -26,7 +26,7 @@
     </style>
     <script>
         var layout = {
-            'rows' : [
+            'rows': [
                 {
                     'id': 'header',
                     'outerWidth': '100%'
@@ -35,35 +35,25 @@
                     'id': 'outerMain',
                     'outerWidth': '100%',
                     'outerHeight': '100%',
-                    'minimumHeight' : 100,
-                    // 'columns' : [
-                    //     {
-                    //         'id': 'mainLeft',
-                    //         'outerHeight': '100%',
-                    //         'outerWidth': '100%',
-                    //     },
-                    //     {
-                    //         'id': 'mainRight',
-                    //         'outerHeight': '100%',
-                    //         'outerWidth': '200',
-                    //     },
-                    // ]
-                    'rows' : [
+                    'minHeight': 100,
+                    'columns': [
                         {
                             'id': 'mainLeft',
-                            'outerHeight': '50%',
+                            'outerHeight': '100%',
+                            'outerWidth': '100%'
                         },
                         {
                             'id': 'mainRight',
-                            'outerHeight': '50%',
-                        },
+                            'outerHeight': '100%'
+                        }
                     ]
                 },
                 {
                     'id': 'footer',
                     'outerWidth': '100%'
-                },
-            ]
+                }
+            ],
+            'minWidth': 500
         };
         $(function () {
             $(window).xLayout(layout);

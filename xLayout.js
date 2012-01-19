@@ -27,30 +27,43 @@
     //
     // That allows us to use the same algorithms for rows and columns.
     $.fn.xLayout = function (layout) {
+        var here = layout.id && layout.id === "outerMain";
 
-        var sizeA,  sizeB,
-            outerA, outerB,
+        var sizeA,     sizeB,
+            outerA,    outerB,
             setOuterA, setOuterB,
-            startA, startB,
+            startA,    startB,
             endA,
-            dimA,   dimB,
-            minimumA;
+            dimA,      dimB,
+            minA,      minB;
 
         var elementArray, i, subElement;
 
         if (layout.rows) {
-            outerA = 'outerHeight';
-            outerB = 'outerWidth';
+            outerA    = 'outerHeight';
+            outerB    = 'outerWidth';
             setOuterA = 'setOuterHeight';
             setOuterB = 'setOuterWidth';
-            startA = 'top';
-            startB = 'left';
-            endA   = 'bottom';
-            dimA   = 'height';
-            dimB   = 'width';
-            minimumA = 'minimumHeight';
+            startA    = 'top';
+            startB    = 'left';
+            endA      = 'bottom';
+            dimA      = 'height';
+            dimB      = 'width';
+            minA      = 'minHeight';
+            minB      = 'minWidth';
             elementArray = layout.rows;
         } else if (layout.columns) {
+            outerA    = 'outerWidth';
+            outerB    = 'outerHeight';
+            setOuterA = 'setOuterWidth';
+            setOuterB = 'setOuterHeight';
+            startA    = 'left';
+            startB    = 'top';
+            endA      = 'right';
+            dimA      = 'width';
+            dimB      = 'height';
+            minA      = 'minWidth';
+            minB      = 'minHeight';
             elementArray = layout.columns;
         }
 
@@ -83,17 +96,33 @@
         // First calculate how much of sizeA is already allocated. Store that
         // in staticA.
         var staticA = 0;
-        // For two elements that are "next to each other", both margins are not
+
+        // For two divs that are below each other, both margins are not
         // applied, only the largest one.
         var prevMargin = 0;
+
         var fraction, subElementA;
         for (i = 0 ; i < elementArray.length; i++) {
             subElement = elementArray[i];
             if (! subElement['$']) {
                 subElement['$'] = $('#' + subElement['id']);
             }
-            var newMargin = getPxInt(subElement['$'].css('margin-' + startA));
-            staticA += (newMargin > prevMargin) ? newMargin : prevMargin;
+
+            // For some reason that I don't yet understand, rows behave
+            // differently than columns
+            if (layout.rows) {
+                // The margins of rows are not both applied - only the largest
+                // one.
+                var newMargin =
+                    getPxInt(subElement['$'].css('margin-' + startA));
+                staticA += (newMargin > prevMargin) ? newMargin : prevMargin;
+                prevMargin = getPxInt(subElement['$'].css('margin-' + endA));
+            } else {
+                // The margins of columns are both applied
+                staticA +=
+                    getPxInt(subElement['$'].css('margin-' + startA)) +
+                    getPxInt(subElement['$'].css('margin-' + endA));
+            }
             staticA +=
                 getPxInt(subElement['$'].css('border-' + startA + '-width'));
             staticA += getPxInt(subElement['$'].css('padding-' + startA));
@@ -103,11 +132,10 @@
             staticA += getPxInt(subElement['$'].css('padding-' + endA));
             staticA +=
                 getPxInt(subElement['$'].css('border-' + endA + '-width'));
-            prevMargin = getPxInt(subElement['$'].css('margin-' + endA));
         }
         staticA += prevMargin;
 
-        // Now, if some of the elements have a minimumHeight/Width, then fudge
+        // Now, if some of the elements have a minHeight/Width, then fudge
         // the staticA appropriately, so that the remaining elements resize
         // properly in the remaining height/width.
         var remainingA = sizeA - staticA;
@@ -116,9 +144,9 @@
             fraction = getFraction(subElement[outerA]);
             if (fraction) {
                 subElementA = fraction * remainingA;
-                if (subElement[minimumA] &&
-                    subElementA < subElement[minimumA]) {
-                    staticA += (subElement[minimumA] - subElementA)*1/fraction;
+                if (subElement[minA] &&
+                    subElementA < subElement[minA]) {
+                    staticA += (subElement[minA] - subElementA)*1/fraction;
                 }
             }
         }
@@ -130,9 +158,9 @@
             fraction = getFraction(subElement[outerA]);
             if (fraction) {
                 subElementA = fraction * remainingA;
-                if (subElement[minimumA] &&
-                    subElementA < subElement[minimumA]) {
-                    subElementA = subElement[minimumA];
+                if (subElement[minA] &&
+                    subElementA < subElement[minA]) {
+                    subElementA = subElement[minA];
                 }
                 subElement['$'][dimA](subElementA);
             }
@@ -140,12 +168,15 @@
                 fraction = getFraction(subElement[outerB]);
                 if (fraction) {
                     var subElementB = fraction * sizeB;
+                    if (layout[minB] && subElementB < layout[minB]) {
+                        subElementB = layout[minB];
+                    }
                     subElement['$'][setOuterB](subElementB);
                 }
             }
         }
 
-        // Layout any subelements
+        // Layout any subElements
         for (i = 0 ; i < elementArray.length; i++) {
             subElement = elementArray[i];
             if (subElement['rows'] || subElement['columns']) {

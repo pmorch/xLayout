@@ -18,7 +18,7 @@
             border: 5px solid black;
         }
         #mainLeft, #mainRight {
-            float: left;
+            /* float: left; */
         }
         #mainRight {
             width: 200px;
@@ -36,16 +36,26 @@
                     'outerWidth': '100%',
                     'outerHeight': '100%',
                     'minimumHeight' : 100,
-                    'columns' : [
+                    // 'columns' : [
+                    //     {
+                    //         'id': 'mainLeft',
+                    //         'outerHeight': '100%',
+                    //         'outerWidth': '100%',
+                    //     },
+                    //     {
+                    //         'id': 'mainRight',
+                    //         'outerHeight': '100%',
+                    //         'outerWidth': '200',
+                    //     },
+                    // ]
+                    'rows' : [
                         {
                             'id': 'mainLeft',
-                            'outerHeight': '100%',
-                            'outerWidth': '100%',
+                            'outerHeight': '50%',
                         },
                         {
                             'id': 'mainRight',
-                            'outerHeight': '100%',
-                            'outerWidth': '200',
+                            'outerHeight': '50%',
                         },
                     ]
                 },

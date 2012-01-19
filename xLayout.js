@@ -66,8 +66,8 @@
             }
         }
 
-        sizeA = this[dimA](true);
-        sizeB = this[dimB](true);
+        sizeA = this[dimA]();
+        sizeB = this[dimB]();
 
         function getPxInt(px) {
             var matches;
@@ -142,6 +142,14 @@
                     var subElementB = fraction * sizeB;
                     subElement['$'][setOuterB](subElementB);
                 }
+            }
+        }
+
+        // Layout any subelements
+        for (i = 0 ; i < elementArray.length; i++) {
+            subElement = elementArray[i];
+            if (subElement['rows'] || subElement['columns']) {
+                subElement['$'].xLayout(subElement);
             }
         }
     }

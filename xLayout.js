@@ -27,8 +27,6 @@
     //
     // That allows us to use the same algorithms for rows and columns.
     $.fn.xLayout = function (layout) {
-        var here = layout.id && layout.id === "outerMain";
-
         var sizeA,     sizeB,
             outerA,    outerB,
             setOuterA, setOuterB,
@@ -82,14 +80,14 @@
         sizeA = this[dimA]();
         sizeB = this[dimB]();
 
+        // See "How to get border width in jQuery/javascript"
+        // http://stackoverflow.com/questions/3787502/
         function getPxInt(px) {
             var matches;
-            if (px === "") {
-                return 0;
-            } else if (matches = px.match(/^(\d+)px$/)) {
-                return parseInt(matches[1]);
+            if (matches = px.match(/^(\d+)px$/)) {
+                return parseInt(matches[1], 10);
             } else {
-                throw ("Expected (px) to be '<number>px' or '' here");
+                return 0;
             }
         }
 
@@ -105,7 +103,12 @@
         for (i = 0 ; i < elementArray.length; i++) {
             subElement = elementArray[i];
             if (! subElement['$']) {
-                subElement['$'] = $('#' + subElement['id']);
+                var jQueryElement = $('#' + subElement['id'])
+                if (! jQueryElement.length) {
+                    throw new Error('Couldn\'t find an element with id: ' +
+                                    subElement['id']);
+                }
+                subElement['$'] = jQueryElement;
             }
 
             // For some reason that I don't yet understand, rows behave

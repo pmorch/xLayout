@@ -17,7 +17,7 @@ I want to have 3 divs, the first and the last being 100px high, and the middle o
 
 ## Demo
 
-[layout.html](layout.html) has an example of how it is used.
+`./layout.html` has an example of how it is used.
 
 ## Browser support
 

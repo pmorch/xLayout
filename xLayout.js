@@ -27,6 +27,18 @@
     //
     // That allows us to use the same algorithms for rows and columns.
     $.fn.xLayout = function (layout) {
+        // We can't layout something that isn't visible
+        var testForVisibility;
+        if (this.length && this[0] === window) {
+            // And at least on FF, the window of a hidden iframe is visible,
+            // but it's 'body' is not
+            testForVisibility = $('body');
+        } else {
+            testForVisibility = this;
+        }
+        if (! testForVisibility.is(':visible')) {
+            return;
+        }
         var sizeA,     sizeB,
             outerA,    outerB,
             setOuterA, setOuterB,
